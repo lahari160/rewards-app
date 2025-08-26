@@ -1,70 +1,70 @@
-# Getting Started with Create React App
+--> Customer Rewards Program
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React application that calculates and displays customer reward points based on purchase transactions over a three-month period.
 
-## Available Scripts
+--> Features
 
-In the project directory, you can run:
+Rewards Calculation: Automatically calculates points based on transaction amounts
+Monthly & Total Summaries: Dispoints points earned per month and total per customer
+Transaction History: Shows detailed transaction records with calculated points
+Responsive Design: Works on desktop, tablet, and mobile devices
+Error Handling: Graceful error handling with retry functionality
+Loading States: Professional loading indicators during data fetching
 
-### `npm start`
+--> Reward Calculation Logic
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+The application uses the following points calculation rules:
+2 points for every dollar spent over $100
+1 point** for every dollar spent between $50 and $100
+0 points for every dollar spent below $50
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Examples:
+--> $120 purchase = 2×$20 + 1×$50 = 90 points
+--> $75 purchase = 1×$25 = 25 points
+--> $49 purchase = 0 points
 
-### `npm test`
+Decimal Handling: Amounts are floored before calculation (e.g., $100.99 → $100 → 50 points)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+--> Technical Approach
 
-### `npm run build`
+--> Architecture
+Component-Based Architecture: Modular React components with clear separation of concerns
+Pure Functions: All business logic implemented as pure, testable functions
+Mock API Layer: Simulated asynchronous API calls with proper error handling
+Functional Programming: Used `map`, `reduce`, and `filter` instead of imperative loops
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+--> Key Design Decisions
+No External State Management: Used React hooks instead of Redux as required
+Type Safety: Implemented PropTypes for all component props
+Error Boundaries: Comprehensive error handling throughout the application
+Performance: Optimized re-renders with proper dependency management
+Testing: Comprehensive test coverage for core business logic
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+--> Installation and Setup
+1. Clone the repository
+VS code -> View -> Command Palette -> Git clone -> [https://github.com/lahari160/rewards-app.git](https://github.com/lahari160/rewards-app.git)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. cd rewards-app
 
-### `npm run eject`
+3. npm install
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+4. To start development server -> npm start
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+5. Run tests -> npm test
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Loading Transaction
+![PageLoading](./docs/screenshots/Loading_transaction_data.png)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Desktop Screenshots
+![DesktopView_1](./docs/screenshots/DesktopView_1.png)
+![DesktopView_2](./docs/screenshots/DesktopView_2.png)
 
-## Learn More
+### Mobile View Screenshots
+![MobileView_1](./docs/screenshots/MobileView_1.png)
+![MobileView_2](./docs/screenshots/MobileView_2.png)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Test Cases Screenshot
+![TestCases](./docs/screenshots/TestCases.png)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
