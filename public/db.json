@@ -1,242 +1,243 @@
-[
-  {
-    "id": "trans-1001",
-    "customerId": 1,
-    "customerName": "John Doe",
-    "date": "2025-06-05T14:23:00.000Z",
-    "product": "Laptop",
-    "amount": 189.75
-  },
-  {
-    "id": "trans-1002",
-    "customerId": 2,
-    "customerName": "Jane Smith",
-    "date": "2025-06-12T10:45:00.000Z",
-    "product": "Phone",
-    "amount": 120.5
-  },
-  {
-    "id": "trans-1003",
-    "customerId": 3,
-    "customerName": "Bob Johnson",
-    "date": "2025-07-02T08:12:00.000Z",
-    "product": "Tablet",
-    "amount": 98.25
-  },
-  {
-    "id": "trans-1004",
-    "customerId": 1,
-    "customerName": "John Doe",
-    "date": "2025-07-11T16:30:00.000Z",
-    "product": "Headphones",
-    "amount": 45.9
-  },
-  {
-    "id": "trans-1005",
-    "customerId": 2,
-    "customerName": "Jane Smith",
-    "date": "2025-08-03T11:00:00.000Z",
-    "product": "Charger",
-    "amount": 25.5
-  },
-  {
-    "id": "trans-1006",
-    "customerId": 3,
-    "customerName": "Bob Johnson",
-    "date": "2025-08-08T09:15:00.000Z",
-    "product": "Monitor",
-    "amount": 175.0
-  },
-  {
-    "id": "trans-1007",
-    "customerId": 1,
-    "customerName": "John Doe",
-    "date": "2025-06-21T12:45:00.000Z",
-    "product": "Keyboard",
-    "amount": 60.35
-  },
-  {
-    "id": "trans-1008",
-    "customerId": 2,
-    "customerName": "Jane Smith",
-    "date": "2025-07-15T17:20:00.000Z",
-    "product": "Laptop",
-    "amount": 199.99
-  },
-  {
-    "id": "trans-1009",
-    "customerId": 3,
-    "customerName": "Bob Johnson",
-    "date": "2025-07-28T13:10:00.000Z",
-    "product": "Phone",
-    "amount": 135.45
-  },
-  {
-    "id": "trans-1010",
-    "customerId": 1,
-    "customerName": "John Doe",
-    "date": "2025-08-18T15:30:00.000Z",
-    "product": "Tablet",
-    "amount": 155.0
-  },
-  {
-    "id": "trans-1011",
-    "customerId": 2,
-    "customerName": "Jane Smith",
-    "date": "2025-06-07T09:50:00.000Z",
-    "product": "Headphones",
-    "amount": 42.75
-  },
-  {
-    "id": "trans-1012",
-    "customerId": 3,
-    "customerName": "Bob Johnson",
-    "date": "2025-06-19T18:25:00.000Z",
-    "product": "Charger",
-    "amount": 22.5
-  },
-  {
-    "id": "trans-1013",
-    "customerId": 1,
-    "customerName": "John Doe",
-    "date": "2025-07-03T07:40:00.000Z",
-    "product": "Monitor",
-    "amount": 180.75
-  },
-  {
-    "id": "trans-1014",
-    "customerId": 2,
-    "customerName": "Jane Smith",
-    "date": "2025-07-19T14:10:00.000Z",
-    "product": "Keyboard",
-    "amount": 58.0
-  },
-  {
-    "id": "trans-1015",
-    "customerId": 3,
-    "customerName": "Bob Johnson",
-    "date": "2025-08-12T11:55:00.000Z",
-    "product": "Laptop",
-    "amount": 210.0
-  },
-  {
-    "id": "trans-1016",
-    "customerId": 1,
-    "customerName": "John Doe",
-    "date": "2025-06-25T13:05:00.000Z",
-    "product": "Phone",
-    "amount": 115.2
-  },
-  {
-    "id": "trans-1017",
-    "customerId": 2,
-    "customerName": "Jane Smith",
-    "date": "2025-07-09T10:30:00.000Z",
-    "product": "Tablet",
-    "amount": 140.9
-  },
-  {
-    "id": "trans-1018",
-    "customerId": 3,
-    "customerName": "Bob Johnson",
-    "date": "2025-07-27T16:50:00.000Z",
-    "product": "Headphones",
-    "amount": 49.5
-  },
-  {
-    "id": "trans-1019",
-    "customerId": 1,
-    "customerName": "John Doe",
-    "date": "2025-08-14T08:20:00.000Z",
-    "product": "Charger",
-    "amount": 19.99
-  },
-  {
-    "id": "trans-1020",
-    "customerId": 2,
-    "customerName": "Jane Smith",
-    "date": "2025-08-21T12:15:00.000Z",
-    "product": "Monitor",
-    "amount": 170.25
-  },
-  {
-    "id": "trans-1021",
-    "customerId": 3,
-    "customerName": "Bob Johnson",
-    "date": "2025-06-11T09:30:00.000Z",
-    "product": "Keyboard",
-    "amount": 55.0
-  },
-  {
-    "id": "trans-1022",
-    "customerId": 1,
-    "customerName": "John Doe",
-    "date": "2025-07-06T15:45:00.000Z",
-    "product": "Laptop",
-    "amount": 195.75
-  },
-  {
-    "id": "trans-1023",
-    "customerId": 2,
-    "customerName": "Jane Smith",
-    "date": "2025-07-17T11:40:00.000Z",
-    "product": "Phone",
-    "amount": 130.0
-  },
-  {
-    "id": "trans-1024",
-    "customerId": 3,
-    "customerName": "Bob Johnson",
-    "date": "2025-08-05T14:10:00.000Z",
-    "product": "Tablet",
-    "amount": 145.6
-  },
-  {
-    "id": "trans-1025",
-    "customerId": 1,
-    "customerName": "John Doe",
-    "date": "2025-06-29T13:35:00.000Z",
-    "product": "Headphones",
-    "amount": 40.75
-  },
-  {
-    "id": "trans-1026",
-    "customerId": 2,
-    "customerName": "Jane Smith",
-    "date": "2025-07-23T09:20:00.000Z",
-    "product": "Charger",
-    "amount": 27.5
-  },
-  {
-    "id": "trans-1027",
-    "customerId": 3,
-    "customerName": "Bob Johnson",
-    "date": "2025-08-10T18:00:00.000Z",
-    "product": "Monitor",
-    "amount": 160.4
-  },
-  {
-    "id": "trans-1028",
-    "customerId": 1,
-    "customerName": "John Doe",
-    "date": "2025-06-14T11:25:00.000Z",
-    "product": "Keyboard",
-    "amount": 62.0
-  },
-  {
-    "id": "trans-1029",
-    "customerId": 2,
-    "customerName": "Jane Smith",
-    "date": "2025-07-30T16:05:00.000Z",
-    "product": "Laptop",
-    "amount": 205.5
-  },
-  {
-    "id": "trans-1030",
-    "customerId": 3,
-    "customerName": "Bob Johnson",
-    "date": "2025-08-16T10:55:00.000Z",
-    "product": "Phone",
-    "amount": 118.9
-  }
-]
+{
+  "transactions": [
+    {
+      "id": "1",
+      "customerId": "101",
+      "customerName": "John Doe",
+      "date": "2023-08-01",
+      "amount": 120
+    },
+    {
+      "id": "trans-1002",
+      "customerId": 2,
+      "customerName": "Jane Smith",
+      "date": "2025-06-12T10:45:00.000Z",
+      "product": "Phone",
+      "amount": 120.5
+    },
+    {
+      "id": "trans-1003",
+      "customerId": 3,
+      "customerName": "Bob Johnson",
+      "date": "2025-07-02T08:12:00.000Z",
+      "product": "Tablet",
+      "amount": 98.25
+    },
+    {
+      "id": "trans-1004",
+      "customerId": 1,
+      "customerName": "John Doe",
+      "date": "2025-07-11T16:30:00.000Z",
+      "product": "Headphones",
+      "amount": 45.9
+    },
+    {
+      "id": "trans-1005",
+      "customerId": 2,
+      "customerName": "Jane Smith",
+      "date": "2025-08-03T11:00:00.000Z",
+      "product": "Charger",
+      "amount": 25.5
+    },
+    {
+      "id": "trans-1006",
+      "customerId": 3,
+      "customerName": "Bob Johnson",
+      "date": "2025-08-08T09:15:00.000Z",
+      "product": "Monitor",
+      "amount": 175.0
+    },
+    {
+      "id": "trans-1007",
+      "customerId": 1,
+      "customerName": "John Doe",
+      "date": "2025-06-21T12:45:00.000Z",
+      "product": "Keyboard",
+      "amount": 60.35
+    },
+    {
+      "id": "trans-1008",
+      "customerId": 2,
+      "customerName": "Jane Smith",
+      "date": "2025-07-15T17:20:00.000Z",
+      "product": "Laptop",
+      "amount": 199.99
+    },
+    {
+      "id": "trans-1009",
+      "customerId": 3,
+      "customerName": "Bob Johnson",
+      "date": "2025-07-28T13:10:00.000Z",
+      "product": "Phone",
+      "amount": 135.45
+    },
+    {
+      "id": "trans-1010",
+      "customerId": 1,
+      "customerName": "John Doe",
+      "date": "2025-08-18T15:30:00.000Z",
+      "product": "Tablet",
+      "amount": 155.0
+    },
+    {
+      "id": "trans-1011",
+      "customerId": 2,
+      "customerName": "Jane Smith",
+      "date": "2025-06-07T09:50:00.000Z",
+      "product": "Headphones",
+      "amount": 42.75
+    },
+    {
+      "id": "trans-1012",
+      "customerId": 3,
+      "customerName": "Bob Johnson",
+      "date": "2025-06-19T18:25:00.000Z",
+      "product": "Charger",
+      "amount": 22.5
+    },
+    {
+      "id": "trans-1013",
+      "customerId": 1,
+      "customerName": "John Doe",
+      "date": "2025-07-03T07:40:00.000Z",
+      "product": "Monitor",
+      "amount": 180.75
+    },
+    {
+      "id": "trans-1014",
+      "customerId": 2,
+      "customerName": "Jane Smith",
+      "date": "2025-07-19T14:10:00.000Z",
+      "product": "Keyboard",
+      "amount": 58.0
+    },
+    {
+      "id": "trans-1015",
+      "customerId": 3,
+      "customerName": "Bob Johnson",
+      "date": "2025-08-12T11:55:00.000Z",
+      "product": "Laptop",
+      "amount": 210.0
+    },
+    {
+      "id": "trans-1016",
+      "customerId": 1,
+      "customerName": "John Doe",
+      "date": "2025-06-25T13:05:00.000Z",
+      "product": "Phone",
+      "amount": 115.2
+    },
+    {
+      "id": "trans-1017",
+      "customerId": 2,
+      "customerName": "Jane Smith",
+      "date": "2025-07-09T10:30:00.000Z",
+      "product": "Tablet",
+      "amount": 140.9
+    },
+    {
+      "id": "trans-1018",
+      "customerId": 3,
+      "customerName": "Bob Johnson",
+      "date": "2025-07-27T16:50:00.000Z",
+      "product": "Headphones",
+      "amount": 49.5
+    },
+    {
+      "id": "trans-1019",
+      "customerId": 1,
+      "customerName": "John Doe",
+      "date": "2025-08-14T08:20:00.000Z",
+      "product": "Charger",
+      "amount": 19.99
+    },
+    {
+      "id": "trans-1020",
+      "customerId": 2,
+      "customerName": "Jane Smith",
+      "date": "2025-08-21T12:15:00.000Z",
+      "product": "Monitor",
+      "amount": 170.25
+    },
+    {
+      "id": "trans-1021",
+      "customerId": 3,
+      "customerName": "Bob Johnson",
+      "date": "2025-06-11T09:30:00.000Z",
+      "product": "Keyboard",
+      "amount": 55.0
+    },
+    {
+      "id": "trans-1022",
+      "customerId": 1,
+      "customerName": "John Doe",
+      "date": "2025-07-06T15:45:00.000Z",
+      "product": "Laptop",
+      "amount": 195.75
+    },
+    {
+      "id": "trans-1023",
+      "customerId": 2,
+      "customerName": "Jane Smith",
+      "date": "2025-07-17T11:40:00.000Z",
+      "product": "Phone",
+      "amount": 130.0
+    },
+    {
+      "id": "trans-1024",
+      "customerId": 3,
+      "customerName": "Bob Johnson",
+      "date": "2025-08-05T14:10:00.000Z",
+      "product": "Tablet",
+      "amount": 145.6
+    },
+    {
+      "id": "trans-1025",
+      "customerId": 1,
+      "customerName": "John Doe",
+      "date": "2025-06-29T13:35:00.000Z",
+      "product": "Headphones",
+      "amount": 40.75
+    },
+    {
+      "id": "trans-1026",
+      "customerId": 2,
+      "customerName": "Jane Smith",
+      "date": "2025-07-23T09:20:00.000Z",
+      "product": "Charger",
+      "amount": 27.5
+    },
+    {
+      "id": "trans-1027",
+      "customerId": 3,
+      "customerName": "Bob Johnson",
+      "date": "2025-08-10T18:00:00.000Z",
+      "product": "Monitor",
+      "amount": 160.4
+    },
+    {
+      "id": "trans-1028",
+      "customerId": 1,
+      "customerName": "John Doe",
+      "date": "2025-06-14T11:25:00.000Z",
+      "product": "Keyboard",
+      "amount": 62.0
+    },
+    {
+      "id": "trans-1029",
+      "customerId": 2,
+      "customerName": "Jane Smith",
+      "date": "2025-07-30T16:05:00.000Z",
+      "product": "Laptop",
+      "amount": 205.5
+    },
+    {
+      "id": "trans-1030",
+      "customerId": 3,
+      "customerName": "Bob Johnson",
+      "date": "2025-08-16T10:55:00.000Z",
+      "product": "Phone",
+      "amount": 118.9
+    }
+  ]
+}
