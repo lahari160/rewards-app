@@ -50,21 +50,30 @@ VS code -> View -> Command Palette -> Git clone -> [https://github.com/lahari160
 
 4. To start development server -> npm start
 
-5. Run tests -> npm test
+5. To run JSON server -> npm run server
 
-### Loading Transaction
-![PageLoading](./docs/screenshots/Loading_transaction_data.png)
+6. For Test Cases npm test -- --watchAll
 
-### Desktop Screenshots
-![DesktopView_1](./docs/screenshots/DesktopView_1.png)
-![DesktopView_2](./docs/screenshots/DesktopView_2.png)
 
-### Mobile View Screenshots
-![MobileView_1](./docs/screenshots/MobileView_1.png)
-![MobileView_2](./docs/screenshots/MobileView_2.png)
+### Application Screenshots
+![DesktopView_1](./docs/applicationScreenshots/Screentshot_1.png)
+![DesktopView_2](./docs/applicationScreenshots/Screenshot_2.png)
+
 
 ### Test Cases Screenshot
-![TestCases](./docs/screenshots/TestCases.png)
+![AllTestCases](./docs/testcaseScreenshots/wholeTestCases.png)
+![AppTestTestCases](./docs/testcaseScreenshots/appTestTestCases.png)
+![CalculatePointsTestCases](./docs/testcaseScreenshots/CalculatePointsTestCases1.png)
+![DateFilterTestCases](./docs/testcaseScreenshots/DateFilterTestCases.png)
+![ErrorBoundaryTestCases](./docs/testcaseScreenshots/ErrorBoundaryTestCases.png)
+![FilterBarTestCases](./docs/testcaseScreenshots/FilterBarTestCases.png)
+![ErrorMessageTestCases](./docs/testcaseScreenshots/ErrorMessageTestCases.png)
+![LoadingSpinnerTestCases](./docs/testcaseScreenshots/LoadingSpinnerTestCases.png)
+![PaginationTestCases](./docs/testcaseScreenshots/PaginationTestCases.png)
+![ProcessDataTestCases1](./docs/testcaseScreenshots/ProcessDataTestCases1.png)
+![ProcessDataTestCases2](./docs/testcaseScreenshots/ProcessDataTestCases2.png)
+![ProcessDataTestCases3](./docs/testcaseScreenshots/ProcessDataTestCases3.png)
+![ProcessDataTestCases4](./docs/testcaseScreenshots/ProcessDataTestCases4.png)    
 
 
 
