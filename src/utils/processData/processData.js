@@ -91,6 +91,12 @@ export const sortMonthlyRewards = (monthlyRewards) => {
   });
 };
 
+/**
+ * Sorts transactions based on specified sort order
+ * @param {Array<Transaction>} transactions - Array of transaction objects
+ * @param {string} sortOrder - Sort order ('date-desc', 'date-asc', 'amount-desc', etc.)
+ * @returns {Array<Transaction>} New sorted array of transactions
+ */
 export const sortTransactions = (transactions, sortOrder) => {
   const sorted = [...transactions];
   

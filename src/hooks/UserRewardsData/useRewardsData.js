@@ -69,6 +69,12 @@ const useRewardsData = () => {
     loadData();
   }, []);
 
+  /**
+   * Filters data by date range using from and to date filters
+   * @param {Array<Object>} data - Data to filter
+   * @param {boolean} dateField - If true, use year/month fields; if false, use date string
+   * @returns {Array<Object>} Filtered data
+   */
   const filterDataByDateRange = (data, dateField) => {
     return data.filter(item => {
       const itemDate = dateField ? 
@@ -80,6 +86,11 @@ const useRewardsData = () => {
     });
   };
 
+  /**
+   * Filters data by customer name
+   * @param {Array<Object>} data - Data to filter
+   * @returns {Array<Object>} Filtered data
+   */
   const filterByName = (data) => {
     if (!nameFilter) return data;
     return data.filter(item => 
@@ -87,9 +98,11 @@ const useRewardsData = () => {
     );
   };
 
+  // Apply filters to transactions and monthly rewards
   const filteredTransactions = filterByName(filterDataByDateRange(transactions));
   const filteredMonthlyRewards = filterByName(filterDataByDateRange(monthlyRewards, true));
   
+  // Calculate total rewards by aggregating filtered monthly rewards
   const filteredTotalRewards = filteredMonthlyRewards.reduce((acc, reward) => {
     const key = reward.customerId;
     if (!acc[key]) {

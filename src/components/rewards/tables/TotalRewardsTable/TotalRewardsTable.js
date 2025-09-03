@@ -3,21 +3,36 @@ import PropTypes from 'prop-types';
 import FilterBar from '../../filters/FilterBar/FilterBar';
 import Pagination from '../../../common/Pagination/Pagination';
 
+/**
+ * Number of reward entries to display per page
+ * @constant {number}
+ */
+
 const ITEMS_PER_PAGE = 5;
 
+/**
+ * Component for displaying total rewards data in a filterable table with pagination
+ * @component
+ * @param {Object} props - Component props
+ * @param {Array<Object>} props.data - Array of total reward objects to display
+ * @returns {JSX.Element} Rendered component
+ */
 const TotalRewardsTable = ({ data }) => {
-  const [nameFilter, setNameFilter] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+  // State for filtering and pagination
+  const [nameFilter, setNameFilter] = useState(''); // Filter by customer name
+  const [currentPage, setCurrentPage] = useState(1); // Current page for pagination
 
+  // Show message if no data is available
   if (!data || data.length === 0) {
     return <p>No total rewards data available</p>;
   }
 
+  // Filter data by customer name (case insensitive)
   const filteredData = data.filter(reward =>
     reward.customerName.toLowerCase().includes(nameFilter.toLowerCase())
   );
 
-  // Pagination logic
+  // Pagination logic - calculate which items to show on current page
   const indexOfLastReward = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstReward = indexOfLastReward - ITEMS_PER_PAGE;
   const currentRewards = filteredData.slice(indexOfFirstReward, indexOfLastReward);

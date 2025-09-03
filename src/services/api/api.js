@@ -1,4 +1,7 @@
-// src/api.js
+/**
+ * API service module for handling data fetching operations
+ * @module services/api
+ */
 import Logger from '../logger/logger';
 
 /**

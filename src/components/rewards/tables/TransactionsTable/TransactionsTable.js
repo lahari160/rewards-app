@@ -5,25 +5,41 @@ import FilterBar from '../../filters/FilterBar/FilterBar';
 import Pagination from '../../../common/Pagination/Pagination';
 import { sortTransactions } from '../../../../utils/processData/processData';
 
+/**
+ * Number of transactions to display per page
+ * @constant {number}
+ */
+
 const ITEMS_PER_PAGE = 5;
 
+/**
+ * Component for displaying transaction data in a sortable, filterable table with pagination
+ * @component
+ * @param {Object} props - Component props
+ * @param {Array<Object>} props.data - Array of transaction objects to display
+ * @returns {JSX.Element} Rendered component
+ */
 const TransactionsTable = ({ data }) => {
-  const [sortOrder, setSortOrder] = useState('date-desc');
-  const [nameFilter, setNameFilter] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
+  // State for table sorting, filtering and pagination
+  const [sortOrder, setSortOrder] = useState('date-desc'); // Default sort by date descending
+  const [nameFilter, setNameFilter] = useState(''); // Filter by customer name
+  const [currentPage, setCurrentPage] = useState(1); // Current page for pagination
   
+  // Filter data by customer name (case insensitive)
   const filteredData = data.filter(transaction =>
     transaction.customerName.toLowerCase().includes(nameFilter.toLowerCase())
   );
+  
+  // Sort the filtered data according to current sort order
   const sortedData = sortTransactions(filteredData, sortOrder);
 
-  // Pagination logic
+  // Pagination logic - calculate which items to show on current page
   const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
   const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Reset to first page when filter changes
-  React.useEffect(() => {
+  // Reset to first page when filter changes to avoid empty pages
+  useEffect(() => {
     setCurrentPage(1);
   }, [nameFilter]);
 

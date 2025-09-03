@@ -1,8 +1,8 @@
 {
   "transactions": [
     {
-      "id": "1",
-      "customerId": "101",
+      "id": "trans-1001",
+      "customerId": "1",
       "customerName": "John Doe",
       "date": "2023-08-01",
       "amount": 120
