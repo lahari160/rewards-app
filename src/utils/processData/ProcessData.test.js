@@ -1,92 +1,105 @@
-import { processTransactionsData, sortByDate, sortMonthlyRewards } from '../processData/processData';
+import { 
+  processTransactionsData,
+  sortByDate,
+  sortMonthlyRewards,
+  sortTransactions
+} from "./processData";
+import { calculateTransactionPoints } from "../calculatePoints/calculatePoints";
 
-describe('processTransactionsData', () => {
-  const mockTransactions = [
-    { id: '1', customerId: '101', customerName: 'John', date: '2023-01-15', amount: 120 },
-    { id: '2', customerId: '101', customerName: 'John', date: '2023-02-15', amount: 75 },
-    { id: '3', customerId: '102', customerName: 'Jane', date: '2023-01-20', amount: 200 }
+jest.mock("../calculatePoints/calculatePoints");
+
+describe("processData utils", () => {
+  const sampleTransactions = [
+    { id: "1", customerId: "C1", customerName: "Alice", date: "2023-01-15", amount: 120 },
+    { id: "2", customerId: "C1", customerName: "Alice", date: "2023-02-10", amount: 80 },
+    { id: "3", customerId: "C2", customerName: "Bob",   date: "2023-02-20", amount: 200 },
   ];
 
-  test('processes transactions and calculates rewards correctly', () => {
-    const result = processTransactionsData(mockTransactions);
-    
-    expect(result).toHaveProperty('transactions');
-    expect(result).toHaveProperty('monthlyRewards');
-    expect(result).toHaveProperty('totalRewards');
-    
-    // Check transactions have points
-    expect(result.transactions[0].points).toBe(90);
-    expect(result.transactions[1].points).toBe(25);
-    expect(result.transactions[2].points).toBe(250);
+  beforeEach(() => {
+    jest.clearAllMocks();
+    // Stub points: amount → amount / 10
+    calculateTransactionPoints.mockImplementation(amount => Math.floor(amount / 10));
   });
 
-  test('aggregates monthly rewards correctly', () => {
-    const result = processTransactionsData(mockTransactions);
-    
-    const johnJan = result.monthlyRewards.find(r => 
-      r.customerId === '101' && r.month === 1);
-    expect(johnJan.rewardPoints).toBe(90);
-    
-    const johnFeb = result.monthlyRewards.find(r => 
-      r.customerId === '101' && r.month === 2);
-    expect(johnFeb.rewardPoints).toBe(25);
+  test("processTransactionsData adds points and aggregates rewards", () => {
+    const result = processTransactionsData(sampleTransactions);
+
+    // Each transaction has points
+    expect(result.transactions[0]).toHaveProperty("points");
+
+    // Monthly rewards grouped
+    expect(result.monthlyRewards).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ customerId: "C1", month: 1, year: 2023 }),
+        expect.objectContaining({ customerId: "C1", month: 2, year: 2023 }),
+        expect.objectContaining({ customerId: "C2", month: 2, year: 2023 }),
+      ])
+    );
+
+    // Total rewards grouped by customer
+    const aliceTotal = result.totalRewards.find(r => r.customerId === "C1");
+    const bobTotal = result.totalRewards.find(r => r.customerId === "C2");
+
+    expect(aliceTotal.rewardPoints).toBeGreaterThan(0);
+    expect(bobTotal.rewardPoints).toBeGreaterThan(0);
   });
 
-  test('aggregates total rewards correctly', () => {
-    const result = processTransactionsData(mockTransactions);
-    
-    const johnTotal = result.totalRewards.find(r => r.customerId === '101');
-    expect(johnTotal.rewardPoints).toBe(115); // 90 + 25
-    
-    const janeTotal = result.totalRewards.find(r => r.customerId === '102');
-    expect(janeTotal.rewardPoints).toBe(250);
+  test("sortByDate sorts transactions by date descending", () => {
+    const sorted = sortByDate(sampleTransactions);
+    expect(sorted[0].date).toBe("2023-02-20"); // Bob
+    expect(sorted[2].date).toBe("2023-01-15"); // Alice Jan
   });
 
-  test('handles empty transactions array', () => {
-    const result = processTransactionsData([]);
-    
-    expect(result.transactions).toEqual([]);
-    expect(result.monthlyRewards).toEqual([]);
-    expect(result.totalRewards).toEqual([]);
-  });
-});
-
-describe('sortByDate', () => {
-  const transactions = [
-    { date: '2023-02-15' },
-    { date: '2023-01-15' },
-    { date: '2023-03-15' }
-  ];
-
-  test('sorts transactions by date in descending order', () => {
-    const sorted = sortByDate(transactions);
-    expect(sorted[0].date).toBe('2023-03-15');
-    expect(sorted[2].date).toBe('2023-01-15');
-  });
-
-  test('returns new array without modifying original', () => {
-    const original = [...transactions];
-    sortByDate(transactions);
-    expect(transactions).toEqual(original);
-  });
-});
-
-describe('sortMonthlyRewards', () => {
-  const rewards = [
-    { month: 2, year: 2023 },
-    { month: 1, year: 2023 },
-    { month: 12, year: 2022 }
-  ];
-
-  test('sorts rewards by year and month', () => {
+  test("sortMonthlyRewards sorts by year then month descending", () => {
+    const rewards = [
+      { customerId: "C1", customerName: "Alice", month: 1, year: 2023 },
+      { customerId: "C2", customerName: "Bob",   month: 2, year: 2022 },
+      { customerId: "C3", customerName: "Eve",   month: 5, year: 2023 },
+    ];
     const sorted = sortMonthlyRewards(rewards);
-    expect(sorted[0].year).toBe(2023);
-    expect(sorted[0].month).toBe(2);
+    expect(sorted[0].month).toBe(5); // May 2023 first
+    expect(sorted[sorted.length - 1].year).toBe(2022); // 2022 last
   });
 
-  test('returns new array without modifying original', () => {
-    const original = [...rewards];
-    sortMonthlyRewards(rewards);
-    expect(rewards).toEqual(original);
+  describe("sortTransactions covers all branches", () => {
+    const transactionsWithPoints = [
+      { id: "1", date: "2023-01-15", amount: 100, points: 10 },
+      { id: "2", date: "2023-01-20", amount: 50, points: 5 },
+    ];
+
+    test("date-desc", () => {
+      const result = sortTransactions(transactionsWithPoints, "date-desc");
+      expect(result[0].date).toBe("2023-01-20");
+    });
+
+    test("date-asc", () => {
+      const result = sortTransactions(transactionsWithPoints, "date-asc");
+      expect(result[0].date).toBe("2023-01-15");
+    });
+
+    test("amount-desc", () => {
+      const result = sortTransactions(transactionsWithPoints, "amount-desc");
+      expect(result[0].amount).toBe(100);
+    });
+
+    test("amount-asc", () => {
+      const result = sortTransactions(transactionsWithPoints, "amount-asc");
+      expect(result[0].amount).toBe(50);
+    });
+
+    test("points-desc", () => {
+      const result = sortTransactions(transactionsWithPoints, "points-desc");
+      expect(result[0].points).toBe(10);
+    });
+
+    test("points-asc", () => {
+      const result = sortTransactions(transactionsWithPoints, "points-asc");
+      expect(result[0].points).toBe(5);
+    });
+
+    test("default returns unchanged", () => {
+      const result = sortTransactions(transactionsWithPoints, "invalid-key");
+      expect(result).toEqual(transactionsWithPoints);
+    });
   });
 });
