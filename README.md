@@ -52,7 +52,8 @@ VS code -> View -> Command Palette -> Git clone -> [https://github.com/lahari160
 
 5. For Test Cases npm test -- --watchAll
 
-6. Run tests with coverage flag  npm test -- --coverage
+6. Run tests with coverage flag  npm test -- --coverage // npm test -- --coverage --watchAll=false
+
 
 
 ### Application Screenshots
