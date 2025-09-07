@@ -12,7 +12,7 @@ import './App.css';
  */
 function App() {
   return (
-    <div className="app">
+    <div className="app" data-testid="app-root">
       {/* Render the main rewards program feature */}
       <RewardsProgram />
     </div>

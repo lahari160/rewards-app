@@ -1,41 +1,69 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import FilterBar from '../../filters/FilterBar/FilterBar';
-import Pagination from '../../../common/Pagination/Pagination';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import FilterBar from "../../filters/FilterBar/FilterBar";
+import Pagination from "../../../common/Pagination/Pagination";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  TableSortLabel,
+} from "@mui/material";
 
 /**
  * Number of reward entries to display per page
  * @constant {number}
  */
-
 const ITEMS_PER_PAGE = 5;
 
 /**
- * Component for displaying total rewards data in a filterable table with pagination
+ * Component for displaying total rewards data
+ * in a filterable, sortable table with pagination.
+ *
  * @component
  * @param {Object} props - Component props
  * @param {Array<Object>} props.data - Array of total reward objects to display
  * @returns {JSX.Element} Rendered component
  */
 const TotalRewardsTable = ({ data }) => {
-  // State for filtering and pagination
-  const [nameFilter, setNameFilter] = useState(''); // Filter by customer name
+  const [nameFilter, setNameFilter] = useState(""); // Filter by customer name
   const [currentPage, setCurrentPage] = useState(1); // Current page for pagination
 
-  // Show message if no data is available
+  // Sorting state
+  const [order, setOrder] = useState("asc");
+  const [orderBy, setOrderBy] = useState("customerName");
+
   if (!data || data.length === 0) {
     return <p>No total rewards data available</p>;
   }
 
-  // Filter data by customer name (case insensitive)
-  const filteredData = data.filter(reward =>
+  // Filter data by customer name
+  const filteredData = data.filter((reward) =>
     reward.customerName.toLowerCase().includes(nameFilter.toLowerCase())
   );
 
-  // Pagination logic - calculate which items to show on current page
+  // Sorting logic
+  const handleSort = (property) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
+
+  const sortedData = [...filteredData].sort((a, b) => {
+    const valueA = a[orderBy];
+    const valueB = b[orderBy];
+    if (valueA < valueB) return order === "asc" ? -1 : 1;
+    if (valueA > valueB) return order === "asc" ? 1 : -1;
+    return 0;
+  });
+
+  // Pagination
   const indexOfLastReward = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstReward = indexOfLastReward - ITEMS_PER_PAGE;
-  const currentRewards = filteredData.slice(indexOfFirstReward, indexOfLastReward);
+  const currentRewards = sortedData.slice(indexOfFirstReward, indexOfLastReward);
 
   return (
     <div>
@@ -44,26 +72,55 @@ const TotalRewardsTable = ({ data }) => {
         onFilterChange={setNameFilter}
         placeholder="Filter by customer name..."
       />
-      <div className="table-container">
-        <table className="rewards-table">
-          <thead>
-            <tr>
-              <th>Customer ID</th>
-              <th>Customer Name</th>
-              <th>Total Reward Points</th>
-            </tr>
-          </thead>
-          <tbody>
+
+      {/* Rewards Table */}
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                <TableSortLabel
+                  active={orderBy === "customerId"}
+                  direction={orderBy === "customerId" ? order : "asc"}
+                  onClick={() => handleSort("customerId")}
+                >
+                  Customer ID
+                </TableSortLabel>
+              </TableCell>
+              <TableCell>
+                <TableSortLabel
+                  active={orderBy === "customerName"}
+                  direction={orderBy === "customerName" ? order : "asc"}
+                  onClick={() => handleSort("customerName")}
+                >
+                  Customer Name
+                </TableSortLabel>
+              </TableCell>
+              <TableCell>
+                <TableSortLabel
+                  active={orderBy === "rewardPoints"}
+                  direction={orderBy === "rewardPoints" ? order : "asc"}
+                  onClick={() => handleSort("rewardPoints")}
+                >
+                  Total Reward Points
+                </TableSortLabel>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+
+          <TableBody>
             {currentRewards.map((reward) => (
-              <tr key={reward.customerId}>
-                <td>{reward.customerId}</td>
-                <td>{reward.customerName}</td>
-                <td>{reward.rewardPoints}</td>
-              </tr>
+              <TableRow key={reward.customerId}>
+                <TableCell>{reward.customerId}</TableCell>
+                <TableCell>{reward.customerName}</TableCell>
+                <TableCell>{reward.rewardPoints}</TableCell>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {/* Pagination */}
       <Pagination
         currentPage={currentPage}
         totalItems={filteredData.length}
@@ -77,11 +134,12 @@ const TotalRewardsTable = ({ data }) => {
 TotalRewardsTable.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      customerId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      customerId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        .isRequired,
       customerName: PropTypes.string.isRequired,
-      rewardPoints: PropTypes.number.isRequired
+      rewardPoints: PropTypes.number.isRequired,
     })
-  ).isRequired
+  ).isRequired,
 };
 
 export default TotalRewardsTable;

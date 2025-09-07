@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const ErrorMessage = ({ message, onRetry }) => {
   return (
-    <div className="error-container">
+    <div className="error-container" data-testid="error-container">
       <h2>Error Loading Data</h2>
       <p>{message}</p>
       {onRetry && (

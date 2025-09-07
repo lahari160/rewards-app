@@ -1,35 +1,13 @@
 // TransactionsTable.test.js
 import { render, screen, fireEvent } from "@testing-library/react";
-
-// ✅ Mock sortTransactions BEFORE importing the component (so default + changes are predictable)
-jest.mock("../../../../utils/processData/processData", () => ({
-  sortTransactions: (data, sortOrder) => {
-    if (sortOrder === "amount-asc") return [...data].sort((a, b) => a.amount - b.amount);
-    if (sortOrder === "amount-desc") return [...data].sort((a, b) => b.amount - a.amount);
-    if (sortOrder === "date-asc") return [...data].sort((a, b) => new Date(a.date) - new Date(b.date));
-    // default: date-desc
-    return [...data].sort((a, b) => new Date(b.date) - new Date(a.date));
-  }
-}));
-
 import TransactionsTable from "./TransactionsTable";
 
-// Mock SortBar
-jest.mock("../../filters/SortBar/SortBar", () => ({ sortOrder, onSortChange }) => (
-  <select
-    data-testid="sort-bar"
-    value={sortOrder}
-    onChange={(e) => onSortChange(e.target.value)}
-  >
-    <option value="date-desc">Date Desc</option>
-    <option value="date-asc">Date Asc</option>
-    <option value="amount-desc">Amount Desc</option>
-    <option value="amount-asc">Amount Asc</option>
-  </select>
-));
-
-// Mock FilterBar
-jest.mock("../../filters/FilterBar/FilterBar", () => ({ filterValue, onFilterChange, placeholder }) => (
+// ✅ Mock FilterBar
+jest.mock("../../filters/FilterBar/FilterBar", () => ({
+  filterValue,
+  onFilterChange,
+  placeholder,
+}) => (
   <input
     data-testid="filter-bar"
     placeholder={placeholder}
@@ -38,26 +16,35 @@ jest.mock("../../filters/FilterBar/FilterBar", () => ({ filterValue, onFilterCha
   />
 ));
 
-// Mock Pagination
-jest.mock("../../../common/Pagination/Pagination", () => ({ currentPage, totalItems, itemsPerPage, onPageChange }) => {
+// ✅ Mock Pagination
+jest.mock("../../../common/Pagination/Pagination", () => ({
+  currentPage,
+  totalItems,
+  itemsPerPage,
+  onPageChange,
+}) => {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   return (
     <div data-testid="pagination">
-      <span>Page {currentPage} of {totalPages}</span>
+      <span>
+        Page {currentPage} of {totalPages}
+      </span>
       {Array.from({ length: totalPages }, (_, i) => (
-        <button key={i+1} onClick={() => onPageChange(i+1)}>{i+1}</button>
+        <button key={i + 1} onClick={() => onPageChange(i + 1)}>
+          {i + 1}
+        </button>
       ))}
     </div>
   );
 });
 
 const sampleData = [
-  { id: "1", date: "2023-05-01", customerName: "Alice",   amount: 120, points: 10 },
-  { id: "2", date: "2023-06-15", customerName: "Bob",     amount: 80,  points: 20 },
+  { id: "1", date: "2023-05-01", customerName: "Alice", amount: 120, points: 10 },
+  { id: "2", date: "2023-06-15", customerName: "Bob", amount: 80, points: 20 },
   { id: "3", date: "2023-07-20", customerName: "Charlie", amount: 200, points: 30 },
-  { id: "4", date: "2023-08-10", customerName: "David",   amount: 150, points: 40 },
-  { id: "5", date: "2023-09-05", customerName: "Eve",     amount: 90,  points: 50 },
-  { id: "6", date: "2023-10-01", customerName: "Frank",   amount: 300, points: 60 }
+  { id: "4", date: "2023-08-10", customerName: "David", amount: 150, points: 40 },
+  { id: "5", date: "2023-09-05", customerName: "Eve", amount: 90, points: 50 },
+  { id: "6", date: "2023-10-01", customerName: "Frank", amount: 300, points: 60 },
 ];
 
 describe("TransactionsTable", () => {
@@ -74,21 +61,17 @@ describe("TransactionsTable", () => {
     render(<TransactionsTable data={sampleData} />);
     // 1 header row + 5 data rows
     expect(screen.getAllByRole("row")).toHaveLength(6);
-    // Newest (Frank) should be on page 1 by default
+    // Newest (Frank) should be visible by default
     expect(screen.getByText("Frank")).toBeInTheDocument();
   });
 
-  test("navigates to second page with pagination (shows oldest Alice)", async () => {
+  test("navigates to second page with pagination (shows Alice only)", () => {
     render(<TransactionsTable data={sampleData} />);
-    const page2Button = screen.getByRole("button", { name: "2" });
-    fireEvent.click(page2Button);
+    fireEvent.click(screen.getByRole("button", { name: "2" }));
 
-    // After moving to page 2, Alice should be visible and Frank should not
-    expect(await screen.findByText("Alice")).toBeInTheDocument();
+    expect(screen.getByText("Alice")).toBeInTheDocument();
     expect(screen.queryByText("Frank")).not.toBeInTheDocument();
-
-    const rows = screen.getAllByRole("row");
-    expect(rows).toHaveLength(2); // header + Alice
+    expect(screen.getAllByRole("row")).toHaveLength(2); // header + Alice
   });
 
   test("filters transactions by customer name", () => {
@@ -101,22 +84,36 @@ describe("TransactionsTable", () => {
     expect(screen.queryByText("Alice")).not.toBeInTheDocument();
   });
 
-  test("sorts by amount ascending across pages", async () => {
-    render(<TransactionsTable data={sampleData} />);
-    const sortSelect = screen.getByTestId("sort-bar");
+  test("sorts by Amount ascending when clicking Amount header", () => {
+  render(<TransactionsTable data={sampleData} />);
+  const amountHeader = screen.getByText("Amount");
 
-    // amount-asc → page 1 should contain: Bob(80), Eve(90), Alice(120), David(150), Charlie(200)
-    fireEvent.change(sortSelect, { target: { value: "amount-asc" } });
+  // Click once = asc
+  fireEvent.click(amountHeader);
 
-    const rowsPage1 = screen.getAllByRole("row").slice(1); // exclude header
-    expect(rowsPage1[0]).toHaveTextContent("Bob");       // lowest = 80
-    expect(rowsPage1[rowsPage1.length - 1]).toHaveTextContent("Charlie"); // 5th = 200
-    expect(screen.queryByText("Frank")).not.toBeInTheDocument(); // Frank(300) should be on page 2
+  const rowsAsc = screen.getAllByRole("row").slice(1); // skip header
 
-    // Go to page 2 → should show Frank only
-    fireEvent.click(screen.getByRole("button", { name: "2" }));
-    expect(await screen.findByText("Frank")).toBeInTheDocument();
-    const rowsPage2 = screen.getAllByRole("row");
-    expect(rowsPage2).toHaveLength(2); // header + Frank
-  });
+  // Page 1 should contain: Bob(80), Eve(90), Alice(120), David(150), Charlie(200)
+  expect(rowsAsc[0]).toHaveTextContent("Bob");     // lowest = 80
+  expect(rowsAsc[rowsAsc.length - 1]).toHaveTextContent("Charlie"); // 5th = 200
+
+  // Frank(300) is on page 2, not on page 1
+  expect(screen.queryByText("Frank")).not.toBeInTheDocument();
+});
+
+test("sorts by Amount descending when clicking Amount header twice", () => {
+  render(<TransactionsTable data={sampleData} />);
+  const amountHeader = screen.getByText("Amount");
+
+  // Click twice = desc
+  fireEvent.click(amountHeader);
+  fireEvent.click(amountHeader);
+
+  const rowsDesc = screen.getAllByRole("row").slice(1); // skip header
+
+  // Page 1 should contain: Frank(300), Charlie(200), David(150), Alice(120), Eve(90)
+  expect(rowsDesc[0]).toHaveTextContent("Frank"); // highest = 300
+  expect(rowsDesc[rowsDesc.length - 1]).toHaveTextContent("Eve"); // lowest on page 1 = 90
+});
+
 });

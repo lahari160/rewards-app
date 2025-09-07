@@ -4,29 +4,35 @@ import LoadingSpinner from './LoadingSpinner';
 
 describe('LoadingSpinner', () => {
   it('renders with default loading message', () => {
-    const { container } = render(<LoadingSpinner />);
-    
+    render(<LoadingSpinner />);
+
+    // Query by text for the loading message
     expect(screen.getByText('Loading...')).toBeInTheDocument();
-    expect(container.firstChild).toHaveClass('loading-container');
+
+    // Query by test ID for container
+    expect(screen.getByTestId('loading-container')).toHaveClass('loading-container');
   });
 
   it('renders with custom message', () => {
     const customMessage = 'Please wait...';
     render(<LoadingSpinner message={customMessage} />);
-    
+
     expect(screen.getByText(customMessage)).toBeInTheDocument();
   });
 
   it('renders spinner element', () => {
-    const { container } = render(<LoadingSpinner />);
-    
-    expect(container.querySelector('.spinner')).toBeInTheDocument();
+    render(<LoadingSpinner />);
+
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
 
   it('applies correct CSS classes', () => {
-    const { container } = render(<LoadingSpinner />);
-    
-    expect(container.firstChild).toHaveClass('loading-container');
-    expect(container.querySelector('.spinner')).toBeInTheDocument();
+    render(<LoadingSpinner />);
+
+    const container = screen.getByTestId('loading-container');
+    const spinner = screen.getByTestId('spinner');
+
+    expect(container).toHaveClass('loading-container');
+    expect(spinner).toBeInTheDocument();
   });
 });

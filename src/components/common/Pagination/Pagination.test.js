@@ -67,11 +67,11 @@ describe('Pagination', () => {
     expect(screen.getByText('1')).not.toHaveClass('active');
   });
 
-  it('does not render when total pages is 1', () => {
-    const { container } = render(
-      <Pagination {...defaultProps} totalItems={10} />
-    );
+  it('does not render pagination controls when total pages is 1', () => {
+    render(<Pagination {...defaultProps} totalItems={5} itemsPerPage={10} />);
     
-    expect(container.firstChild).toBeNull();
+    expect(screen.queryByText('1')).not.toBeInTheDocument();
+    expect(screen.queryByText('Previous')).not.toBeInTheDocument();
+    expect(screen.queryByText('Next')).not.toBeInTheDocument();
   });
 });

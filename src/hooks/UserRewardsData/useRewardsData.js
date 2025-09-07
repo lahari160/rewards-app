@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { fetchTransactions } from '../../services/api/api';
-import { processTransactionsData } from '../../utils/processData/processData';
-import Logger from '../../services/logger/logger';
+import { useState, useEffect } from "react";
+import { fetchTransactions } from "../../services/api/api";
+import { processTransactionsData } from "../../utils/processData/processData";
+import Logger from "../../services/logger/logger";
 
 /**
  * @typedef {Object} RewardsData
@@ -27,39 +27,41 @@ import Logger from '../../services/logger/logger';
 const useRewardsData = () => {
   const [transactions, setTransactions] = useState([]);
   const [monthlyRewards, setMonthlyRewards] = useState([]);
-  const [totalRewards, setTotalRewards] = useState([]);
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
-  const [nameFilter, setNameFilter] = useState('');
+  // const [totalRewards, setTotalRewards] = useState([]);
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [nameFilter, setNameFilter] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const loadData = async () => {
     try {
-      Logger.info('Loading rewards data');
+      Logger.info("Loading rewards data");
       setIsLoading(true);
       setError(null);
-      
+
       const response = await fetchTransactions();
-      
+
       if (response.success) {
         const processedData = processTransactionsData(response.data);
-        Logger.debug('Processed rewards data', {
+        Logger.debug("Processed rewards data", {
           transactions: processedData.transactions.length,
           monthlyRewards: processedData.monthlyRewards.length,
-          totalRewards: processedData.totalRewards.length
+          totalRewards: processedData.totalRewards.length,
         });
-        
+
         setTransactions(processedData.transactions);
         setMonthlyRewards(processedData.monthlyRewards);
-        setTotalRewards(processedData.totalRewards);
+        // setTotalRewards(processedData.totalRewards);
+
+        setError(null); // ✅ ensure error is reset on success
       } else {
-        Logger.error('Failed to fetch data', { response });
-        setError('Failed to fetch data');
+        Logger.error("Failed to fetch data", { response });
+        setError("Failed to fetch data");
       }
     } catch (err) {
-      Logger.error('Error loading rewards data', err);
-      setError(err.message || 'An error occurred while fetching data');
+      Logger.error("Error loading rewards data", err);
+      setError(err.message || "An error occurred while fetching data");
     } finally {
       setIsLoading(false);
     }
@@ -70,46 +72,42 @@ const useRewardsData = () => {
   }, []);
 
   /**
-   * Filters data by date range using from and to date filters
-   * @param {Array<Object>} data - Data to filter
-   * @param {boolean} dateField - If true, use year/month fields; if false, use date string
-   * @returns {Array<Object>} Filtered data
+   * Filters data by date range
    */
   const filterDataByDateRange = (data, dateField) => {
-    return data.filter(item => {
-      const itemDate = dateField ? 
-        `${item.year}-${String(item.month).padStart(2, '0')}` : 
-        item.date.substring(0, 7);
-      
-      return (!fromDate || itemDate >= fromDate) && 
-             (!toDate || itemDate <= toDate);
+    return data.filter((item) => {
+      const itemDate = dateField
+        ? `${item.year}-${String(item.month).padStart(2, "0")}`
+        : item.date.substring(0, 7);
+
+      return (!fromDate || itemDate >= fromDate) && (!toDate || itemDate <= toDate);
     });
   };
 
   /**
    * Filters data by customer name
-   * @param {Array<Object>} data - Data to filter
-   * @returns {Array<Object>} Filtered data
    */
   const filterByName = (data) => {
     if (!nameFilter) return data;
-    return data.filter(item => 
+    return data.filter((item) =>
       item.customerName.toLowerCase().includes(nameFilter.toLowerCase())
     );
   };
 
-  // Apply filters to transactions and monthly rewards
+  // Apply filters
   const filteredTransactions = filterByName(filterDataByDateRange(transactions));
-  const filteredMonthlyRewards = filterByName(filterDataByDateRange(monthlyRewards, true));
-  
-  // Calculate total rewards by aggregating filtered monthly rewards
+  const filteredMonthlyRewards = filterByName(
+    filterDataByDateRange(monthlyRewards, true)
+  );
+
+  // Aggregate total rewards
   const filteredTotalRewards = filteredMonthlyRewards.reduce((acc, reward) => {
     const key = reward.customerId;
     if (!acc[key]) {
       acc[key] = {
         customerId: reward.customerId,
         customerName: reward.customerName,
-        rewardPoints: 0
+        rewardPoints: 0,
       };
     }
     acc[key].rewardPoints += reward.rewardPoints;
@@ -128,7 +126,7 @@ const useRewardsData = () => {
     setFromDate,
     setToDate,
     setNameFilter,
-    loadData
+    loadData,
   };
 };
 

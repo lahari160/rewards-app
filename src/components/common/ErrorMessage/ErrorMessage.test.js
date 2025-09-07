@@ -43,8 +43,8 @@ describe('ErrorMessage', () => {
   });
 
   it('applies error-container class', () => {
-    const { container } = render(<ErrorMessage {...defaultProps} />);
-    
-    expect(container.firstChild).toHaveClass('error-container');
-  });
+  render(<ErrorMessage {...defaultProps} />);
+  expect(screen.getByTestId("error-container")).toHaveClass("error-container");
+});
+
 });

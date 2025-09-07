@@ -1,4 +1,6 @@
+/* eslint-disable testing-library/no-node-access */
 // src/services/api/api.test.js
+
 import { fetchTransactions, fetchCustomers, fetchAllData, fetchDataWithFilters } from "./api";
 
 beforeEach(() => {
