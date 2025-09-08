@@ -20,23 +20,32 @@ import {
 const ITEMS_PER_PAGE = 5;
 
 /**
- * Component for displaying transaction data
- * in a filterable, sortable table with pagination.
+ * Component for displaying a transaction table with filtering,
+ * sorting, and pagination features.
  *
  * @component
  * @param {Object} props - Component props
  * @param {Array<Object>} props.data - Array of transaction objects to display
+ * @param {string} props.data[].id - Transaction ID
+ * @param {string} props.data[].customerName - Customer name
+ * @param {string} props.data[].date - Purchase date in ISO string format
+ * @param {string} props.data[].product - Product purchased
+ * @param {number} props.data[].amount - Transaction amount
+ * @param {number} props.data[].points - Reward points earned
  * @returns {JSX.Element} Rendered component
  */
 const TransactionsTable = ({ data }) => {
-  // State for sorting, filtering, and pagination
-  const [nameFilter, setNameFilter] = useState(""); // Filter by customer name
-  const [currentPage, setCurrentPage] = useState(1); // Current page
-  const [order, setOrder] = useState("desc"); // Sort order
-  const [orderBy, setOrderBy] = useState("date"); // Sort column
+  // Filter by customer name
+  const [nameFilter, setNameFilter] = useState("");
+  // Current pagination page
+  const [currentPage, setCurrentPage] = useState(1);
+  // Sorting order ('asc' or 'desc')
+  const [order, setOrder] = useState("desc");
+  // Column to sort by
+  const [orderBy, setOrderBy] = useState("date");
 
   /**
-   * Filters data by customer name (case insensitive).
+   * Filter transactions based on customer name
    * @type {Array<Object>}
    */
   const filteredData = data.filter((transaction) =>
@@ -44,7 +53,7 @@ const TransactionsTable = ({ data }) => {
   );
 
   /**
-   * Handles sorting logic when a column header is clicked.
+   * Handles sorting when a column header is clicked
    * @param {string} property - Column name to sort by
    */
   const handleSort = (property) => {
@@ -54,7 +63,7 @@ const TransactionsTable = ({ data }) => {
   };
 
   /**
-   * Sorts filtered data by selected column and order.
+   * Sort filtered data based on selected column and order
    * @type {Array<Object>}
    */
   const sortedData = [...filteredData].sort((a, b) => {
@@ -72,21 +81,19 @@ const TransactionsTable = ({ data }) => {
     return 0;
   });
 
-  /**
-   * Pagination logic - slice sorted data for current page.
-   * @type {Array<Object>}
-   */
+  // Pagination logic
   const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
   const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Reset to first page when filter changes
+  // Reset page when filter changes
   useEffect(() => {
     setCurrentPage(1);
   }, [nameFilter]);
 
   return (
     <div>
+      {/* Filter bar */}
       <div className="filters-container">
         <FilterBar
           filterValue={nameFilter}
@@ -95,7 +102,7 @@ const TransactionsTable = ({ data }) => {
         />
       </div>
 
-      {/* Transactions Table */}
+      {/* Transactions table */}
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -109,40 +116,54 @@ const TransactionsTable = ({ data }) => {
                   Transaction ID
                 </TableSortLabel>
               </TableCell>
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === "date"}
-                  direction={orderBy === "date" ? order : "asc"}
-                  onClick={() => handleSort("date")}
-                >
-                  Date
-                </TableSortLabel>
-              </TableCell>
+
               <TableCell>
                 <TableSortLabel
                   active={orderBy === "customerName"}
                   direction={orderBy === "customerName" ? order : "asc"}
                   onClick={() => handleSort("customerName")}
                 >
-                  Customer
+                  Customer Name
                 </TableSortLabel>
               </TableCell>
+
+              <TableCell>
+                <TableSortLabel
+                  active={orderBy === "date"}
+                  direction={orderBy === "date" ? order : "asc"}
+                  onClick={() => handleSort("date")}
+                >
+                  Purchase Date
+                </TableSortLabel>
+              </TableCell>
+
+              <TableCell>
+                <TableSortLabel
+                  active={orderBy === "product"}
+                  direction={orderBy === "product" ? order : "asc"}
+                  onClick={() => handleSort("product")}
+                >
+                  Product Purchased
+                </TableSortLabel>
+              </TableCell>
+
               <TableCell>
                 <TableSortLabel
                   active={orderBy === "amount"}
                   direction={orderBy === "amount" ? order : "asc"}
                   onClick={() => handleSort("amount")}
                 >
-                  Amount
+                  Price
                 </TableSortLabel>
               </TableCell>
+
               <TableCell>
                 <TableSortLabel
                   active={orderBy === "points"}
                   direction={orderBy === "points" ? order : "asc"}
                   onClick={() => handleSort("points")}
                 >
-                  Points
+                  Reward Points
                 </TableSortLabel>
               </TableCell>
             </TableRow>
@@ -152,10 +173,11 @@ const TransactionsTable = ({ data }) => {
             {currentItems.map((transaction) => (
               <TableRow key={transaction.id}>
                 <TableCell>{transaction.id}</TableCell>
+                <TableCell>{transaction.customerName}</TableCell>
                 <TableCell>
                   {new Date(transaction.date).toLocaleDateString()}
                 </TableCell>
-                <TableCell>{transaction.customerName}</TableCell>
+                <TableCell>{transaction.product}</TableCell>
                 <TableCell>${transaction.amount.toFixed(2)}</TableCell>
                 <TableCell>{transaction.points}</TableCell>
               </TableRow>
@@ -179,8 +201,9 @@ TransactionsTable.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.string.isRequired,
-      date: PropTypes.string.isRequired,
       customerName: PropTypes.string.isRequired,
+      date: PropTypes.string.isRequired,
+      product: PropTypes.string.isRequired,
       amount: PropTypes.number.isRequired,
       points: PropTypes.number.isRequired,
     })
