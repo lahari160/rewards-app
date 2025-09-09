@@ -27,7 +27,6 @@ import Logger from "../../services/logger/logger";
 const useRewardsData = () => {
   const [transactions, setTransactions] = useState([]);
   const [monthlyRewards, setMonthlyRewards] = useState([]);
-  // const [totalRewards, setTotalRewards] = useState([]);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [nameFilter, setNameFilter] = useState("");
@@ -52,7 +51,6 @@ const useRewardsData = () => {
 
         setTransactions(processedData.transactions);
         setMonthlyRewards(processedData.monthlyRewards);
-        // setTotalRewards(processedData.totalRewards);
 
         setError(null); // ✅ ensure error is reset on success
       } else {

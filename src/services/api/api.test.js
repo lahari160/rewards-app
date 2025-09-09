@@ -3,6 +3,13 @@
 
 import { fetchTransactions, fetchCustomers, fetchAllData, fetchDataWithFilters } from "./api";
 
+// ✅ Mock Logger to prevent noisy console output during tests
+jest.mock("../logger/logger", () => ({
+  info: jest.fn(),
+  debug: jest.fn(),
+  error: jest.fn(),
+}));
+
 beforeEach(() => {
   global.fetch = jest.fn();
 });
