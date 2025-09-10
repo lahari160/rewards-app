@@ -20,12 +20,41 @@ import {
 const ITEMS_PER_PAGE = 5;
 
 /**
+ * Groups reward data by (customerId + month + year),
+ * summing reward points if multiple purchases occur
+ * in the same month for the same customer.
+ *
+ * @param {Array<Object>} data - Raw reward data
+ * @returns {Array<Object>} Grouped reward data
+ */
+const groupRewardsByPeriod = (data) => {
+  const grouped = {};
+
+  data.forEach((reward) => {
+    const key = `${reward.customerId}-${reward.month}-${reward.year}`;
+    if (!grouped[key]) {
+      grouped[key] = {
+        customerId: reward.customerId,
+        customerName: reward.customerName,
+        month: reward.month,
+        year: reward.year,
+        rewardPoints: reward.rewardPoints,
+      };
+    } else {
+      grouped[key].rewardPoints += reward.rewardPoints;
+    }
+  });
+
+  return Object.values(grouped);
+};
+
+/**
  * Component for displaying monthly rewards data
- * in a filterable, sortable table with pagination.
+ * in a filterable, sortable, grouped table with pagination.
  *
  * @component
  * @param {Object} props - Component props
- * @param {Array<Object>} props.data - Array of monthly reward objects to display
+ * @param {Array<Object>} props.data - Array of raw reward objects to display
  * @returns {JSX.Element} Rendered component
  */
 const MonthlyRewardsTable = ({ data }) => {
@@ -38,10 +67,16 @@ const MonthlyRewardsTable = ({ data }) => {
   const [orderBy, setOrderBy] = useState("customerName"); // Column being sorted
 
   /**
+   * Group the data first to sum rewards by (customerId + month + year).
+   * @type {Array<Object>}
+   */
+  const groupedData = groupRewardsByPeriod(data);
+
+  /**
    * Filters data by customer name (case insensitive).
    * @type {Array<Object>}
    */
-  const filteredData = data.filter((reward) =>
+  const filteredData = groupedData.filter((reward) =>
     reward.customerName.toLowerCase().includes(nameFilter.toLowerCase())
   );
 
@@ -83,19 +118,16 @@ const MonthlyRewardsTable = ({ data }) => {
   const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
 
   /**
-   * Formats month and year numbers into a readable string (e.g., "January 2023").
+   * Formats month and year numbers into a readable string (e.g., "August 2023").
    *
    * @param {number} month - Month number (1-12)
    * @param {number} year - Year (e.g., 2023)
    * @returns {string} Formatted month and year
    */
   const formatMonthYear = (month, year) => {
-  const date = new Date(year, month - 1, 1); // Use day=1
-  const day = String(date.getDate()).padStart(2, "0");
-  const mon = String(date.getMonth() + 1).padStart(2, "0");
-  const yr = date.getFullYear();
-  return `${day}-${mon}-${yr}`;
-};
+    const date = new Date(year, month - 1, 1);
+    return date.toLocaleString("default", { month: "long", year: "numeric" });
+  };
 
   // Reset to first page when filter changes to avoid empty pages
   useEffect(() => {

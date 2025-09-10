@@ -4,31 +4,13 @@ import { processTransactionsData } from "../../utils/processData/processData";
 import Logger from "../../services/logger/logger";
 
 /**
- * @typedef {Object} RewardsData
- * @property {Array<Object>} filteredTransactions - Filtered transaction data
- * @property {Array<Object>} filteredMonthlyRewards - Filtered monthly rewards
- * @property {Array<Object>} filteredTotalRewards - Filtered total rewards
- * @property {string} fromDate - Start date filter (YYYY-MM)
- * @property {string} toDate - End date filter (YYYY-MM)
- * @property {string} nameFilter - Customer name filter
- * @property {boolean} isLoading - Loading state
- * @property {string|null} error - Error message if any
- */
-
-/**
  * Custom hook for managing rewards program data and filters
- * @returns {RewardsData & {
- *   setFromDate: (date: string) => void,
- *   setToDate: (date: string) => void,
- *   setNameFilter: (name: string) => void,
- *   loadData: () => Promise<void>
- * }} Rewards data and control functions
  */
 const useRewardsData = () => {
   const [transactions, setTransactions] = useState([]);
   const [monthlyRewards, setMonthlyRewards] = useState([]);
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
+  const [fromDate, setFromDate] = useState("");   // ✅ empty means no lower bound
+  const [toDate, setToDate] = useState("");       // ✅ empty means no upper bound
   const [nameFilter, setNameFilter] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -51,8 +33,6 @@ const useRewardsData = () => {
 
         setTransactions(processedData.transactions);
         setMonthlyRewards(processedData.monthlyRewards);
-
-        setError(null); // ✅ ensure error is reset on success
       } else {
         Logger.error("Failed to fetch data", { response });
         setError("Failed to fetch data");
@@ -70,15 +50,19 @@ const useRewardsData = () => {
   }, []);
 
   /**
-   * Filters data by date range
+   * Filters data by date range (only if fromDate/toDate are set)
    */
-  const filterDataByDateRange = (data, dateField) => {
+  const filterDataByDateRange = (data, isMonthly = false) => {
     return data.filter((item) => {
-      const itemDate = dateField
+      const itemDate = isMonthly
         ? `${item.year}-${String(item.month).padStart(2, "0")}`
         : item.date.substring(0, 7);
 
-      return (!fromDate || itemDate >= fromDate) && (!toDate || itemDate <= toDate);
+      // ✅ If no fromDate or toDate set, don't filter
+      const afterFrom = !fromDate || itemDate >= fromDate;
+      const beforeTo = !toDate || itemDate <= toDate;
+
+      return afterFrom && beforeTo;
     });
   };
 
@@ -93,7 +77,9 @@ const useRewardsData = () => {
   };
 
   // Apply filters
-  const filteredTransactions = filterByName(filterDataByDateRange(transactions));
+  const filteredTransactions = filterByName(
+    filterDataByDateRange(transactions)
+  );
   const filteredMonthlyRewards = filterByName(
     filterDataByDateRange(monthlyRewards, true)
   );

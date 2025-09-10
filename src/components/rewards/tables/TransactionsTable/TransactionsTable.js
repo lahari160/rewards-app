@@ -13,64 +13,30 @@ import {
   TableSortLabel,
 } from "@mui/material";
 
-/**
- * Number of transactions to display per page
- * @constant {number}
- */
 const ITEMS_PER_PAGE = 5;
 
-/**
- * Component for displaying a transaction table with filtering,
- * sorting, and pagination features.
- *
- * @component
- * @param {Object} props - Component props
- * @param {Array<Object>} props.data - Array of transaction objects to display
- * @param {string} props.data[].id - Transaction ID
- * @param {string} props.data[].customerName - Customer name
- * @param {string} props.data[].date - Purchase date in ISO string format
- * @param {string} props.data[].product - Product purchased
- * @param {number} props.data[].amount - Transaction amount
- * @param {number} props.data[].points - Reward points earned
- * @returns {JSX.Element} Rendered component
- */
 const TransactionsTable = ({ data }) => {
-  // Filter by customer name
   const [nameFilter, setNameFilter] = useState("");
-  // Current pagination page
   const [currentPage, setCurrentPage] = useState(1);
-  // Sorting order ('asc' or 'desc')
   const [order, setOrder] = useState("desc");
-  // Column to sort by
   const [orderBy, setOrderBy] = useState("date");
 
-  /**
-   * Filter transactions based on customer name
-   * @type {Array<Object>}
-   */
+  // Filter data
   const filteredData = data.filter((transaction) =>
     transaction.customerName.toLowerCase().includes(nameFilter.toLowerCase())
   );
 
-  /**
-   * Handles sorting when a column header is clicked
-   * @param {string} property - Column name to sort by
-   */
+  // Sorting
   const handleSort = (property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
-  /**
-   * Sort filtered data based on selected column and order
-   * @type {Array<Object>}
-   */
   const sortedData = [...filteredData].sort((a, b) => {
     let valueA = a[orderBy];
     let valueB = b[orderBy];
 
-    // Convert date strings to Date objects for comparison
     if (orderBy === "date") {
       valueA = new Date(a.date);
       valueB = new Date(b.date);
@@ -81,12 +47,12 @@ const TransactionsTable = ({ data }) => {
     return 0;
   });
 
-  // Pagination logic
+  // Pagination
   const indexOfLastItem = currentPage * ITEMS_PER_PAGE;
   const indexOfFirstItem = indexOfLastItem - ITEMS_PER_PAGE;
   const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
 
-  // Reset page when filter changes
+  // Reset page when filters change
   useEffect(() => {
     setCurrentPage(1);
   }, [nameFilter]);
@@ -103,69 +69,28 @@ const TransactionsTable = ({ data }) => {
       </div>
 
       {/* Transactions table */}
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{ mt: 2 }}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === "id"}
-                  direction={orderBy === "id" ? order : "asc"}
-                  onClick={() => handleSort("id")}
-                >
-                  Transaction ID
-                </TableSortLabel>
-              </TableCell>
-
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === "customerName"}
-                  direction={orderBy === "customerName" ? order : "asc"}
-                  onClick={() => handleSort("customerName")}
-                >
-                  Customer Name
-                </TableSortLabel>
-              </TableCell>
-
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === "date"}
-                  direction={orderBy === "date" ? order : "asc"}
-                  onClick={() => handleSort("date")}
-                >
-                  Purchase Date
-                </TableSortLabel>
-              </TableCell>
-
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === "product"}
-                  direction={orderBy === "product" ? order : "asc"}
-                  onClick={() => handleSort("product")}
-                >
-                  Product Purchased
-                </TableSortLabel>
-              </TableCell>
-
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === "amount"}
-                  direction={orderBy === "amount" ? order : "asc"}
-                  onClick={() => handleSort("amount")}
-                >
-                  Price
-                </TableSortLabel>
-              </TableCell>
-
-              <TableCell>
-                <TableSortLabel
-                  active={orderBy === "points"}
-                  direction={orderBy === "points" ? order : "asc"}
-                  onClick={() => handleSort("points")}
-                >
-                  Reward Points
-                </TableSortLabel>
-              </TableCell>
+              {[
+                { id: "id", label: "Transaction ID" },
+                { id: "customerName", label: "Customer Name" },
+                { id: "date", label: "Purchase Date" },
+                { id: "product", label: "Product Purchased" },
+                { id: "amount", label: "Price" },
+                { id: "points", label: "Reward Points" },
+              ].map((col) => (
+                <TableCell key={col.id}>
+                  <TableSortLabel
+                    active={orderBy === col.id}
+                    direction={orderBy === col.id ? order : "asc"}
+                    onClick={() => handleSort(col.id)}
+                  >
+                    {col.label}
+                  </TableSortLabel>
+                </TableCell>
+              ))}
             </TableRow>
           </TableHead>
 
@@ -191,7 +116,7 @@ const TransactionsTable = ({ data }) => {
         currentPage={currentPage}
         totalItems={filteredData.length}
         itemsPerPage={ITEMS_PER_PAGE}
-        onPageChange={setCurrentPage}
+        onPageChange={(page) => setCurrentPage(page)}
       />
     </div>
   );

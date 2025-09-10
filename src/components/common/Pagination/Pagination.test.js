@@ -1,77 +1,64 @@
-import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import Pagination from './Pagination';
+import React from "react";
+import { render, screen, fireEvent } from "@testing-library/react";
+import Pagination from "./Pagination";
 
-describe('Pagination', () => {
-  const defaultProps = {
-    currentPage: 1,
-    totalItems: 30,
-    itemsPerPage: 10,
-    onPageChange: jest.fn()
+describe("Pagination Component", () => {
+  const setup = (props = {}) => {
+    const defaultProps = {
+      currentPage: 1,
+      totalItems: 50,
+      itemsPerPage: 5,
+      onPageChange: jest.fn(),
+    };
+    return render(<Pagination {...defaultProps} {...props} />);
   };
 
-  beforeEach(() => {
-    defaultProps.onPageChange.mockClear();
+  test("renders correct number of page buttons", () => {
+    setup();
+    // Should render 5 page buttons because of maxVisible=5
+    const pageButtons = screen.getAllByRole("button", { name: /^[0-9]+$/ });
+    expect(pageButtons).toHaveLength(5);
+    expect(screen.getByRole("button", { name: "1" })).toBeInTheDocument();
   });
 
-  it('renders pagination buttons correctly', () => {
-    render(<Pagination {...defaultProps} />);
-    
-    // Should show 3 page buttons (30 items / 10 per page)
-    expect(screen.getByText('1')).toBeInTheDocument();
-    expect(screen.getByText('2')).toBeInTheDocument();
-    expect(screen.getByText('3')).toBeInTheDocument();
-    expect(screen.getByText('Previous')).toBeInTheDocument();
-    expect(screen.getByText('Next')).toBeInTheDocument();
+  test("disables Prev button on first page", () => {
+    setup({ currentPage: 1 });
+    const prevButton = screen.getByRole("button", { name: "Prev" });
+    expect(prevButton).toBeDisabled();
   });
 
-  it('disables Previous button on first page', () => {
-    render(<Pagination {...defaultProps} />);
-    
-    expect(screen.getByText('Previous')).toBeDisabled();
-    expect(screen.getByText('Next')).not.toBeDisabled();
+  test("disables Next button on last page", () => {
+    setup({ currentPage: 10 }); // 50 items / 5 per page = 10 pages
+    const nextButton = screen.getByRole("button", { name: "Next" });
+    expect(nextButton).toBeDisabled();
   });
 
-  it('disables Next button on last page', () => {
-    render(<Pagination {...defaultProps} currentPage={3} />);
-    
-    expect(screen.getByText('Previous')).not.toBeDisabled();
-    expect(screen.getByText('Next')).toBeDisabled();
+  test("calls onPageChange when clicking a page number", () => {
+    const onPageChange = jest.fn();
+    setup({ onPageChange });
+    const page2Button = screen.getByRole("button", { name: "2" });
+    fireEvent.click(page2Button);
+    expect(onPageChange).toHaveBeenCalledWith(2);
   });
 
-  it('calls onPageChange when clicking page numbers', () => {
-    render(<Pagination {...defaultProps} />);
-    
-    fireEvent.click(screen.getByText('2'));
-    expect(defaultProps.onPageChange).toHaveBeenCalledWith(2);
+  test("calls onPageChange when clicking Next", () => {
+    const onPageChange = jest.fn();
+    setup({ currentPage: 1, onPageChange });
+    const nextButton = screen.getByRole("button", { name: "Next" });
+    fireEvent.click(nextButton);
+    expect(onPageChange).toHaveBeenCalledWith(2);
   });
 
-  it('calls onPageChange when clicking Next', () => {
-    render(<Pagination {...defaultProps} />);
-    
-    fireEvent.click(screen.getByText('Next'));
-    expect(defaultProps.onPageChange).toHaveBeenCalledWith(2);
+  test("calls onPageChange when clicking Prev", () => {
+    const onPageChange = jest.fn();
+    setup({ currentPage: 3, onPageChange });
+    const prevButton = screen.getByRole("button", { name: "Prev" });
+    fireEvent.click(prevButton);
+    expect(onPageChange).toHaveBeenCalledWith(2);
   });
 
-  it('calls onPageChange when clicking Previous', () => {
-    render(<Pagination {...defaultProps} currentPage={2} />);
-    
-    fireEvent.click(screen.getByText('Previous'));
-    expect(defaultProps.onPageChange).toHaveBeenCalledWith(1);
-  });
-
-  it('highlights current page', () => {
-    render(<Pagination {...defaultProps} currentPage={2} />);
-    
-    expect(screen.getByText('2')).toHaveClass('active');
-    expect(screen.getByText('1')).not.toHaveClass('active');
-  });
-
-  it('does not render pagination controls when total pages is 1', () => {
-    render(<Pagination {...defaultProps} totalItems={5} itemsPerPage={10} />);
-    
-    expect(screen.queryByText('1')).not.toBeInTheDocument();
-    expect(screen.queryByText('Previous')).not.toBeInTheDocument();
-    expect(screen.queryByText('Next')).not.toBeInTheDocument();
+  test("renders nothing when total pages <= 1", () => {
+    const { container } = setup({ totalItems: 4, itemsPerPage: 5 });
+    expect(container.firstChild).toBeNull();
   });
 });

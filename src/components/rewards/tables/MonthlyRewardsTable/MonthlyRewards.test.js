@@ -79,6 +79,6 @@ describe("MonthlyRewardsTable", () => {
 
   test("formats month and year correctly", () => {
   render(<MonthlyRewardsTable data={[sampleData[0]]} />);
-  expect(screen.getByText("01-01-2023")).toBeInTheDocument();
+  expect(screen.getByText("January 2023")).toBeInTheDocument();
 });
 });
