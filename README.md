@@ -79,5 +79,5 @@ VS code -> View -> Command Palette -> Git clone -> [https://github.com/lahari160
 
 
 ### Coverage screenshots
-![Coverage1](./docs/testcasesCoverage/coverage1%20(1).png)
-![Coverage2](./docs/testcasesCoverage/coverage1%20(2).png)
+![Coverage1](./docs/testcasesCoverage/coverage1.png)
+![Coverage2](./docs/testcasesCoverage/coverage2.png)
